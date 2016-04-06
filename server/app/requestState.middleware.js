@@ -18,11 +18,7 @@ router.use(function (req, res, next) {
 	});
 });
 
-router.use(session({
-	secret: 'tongiscool',
-	resave: false,
-	saveUninitialized: false
-}));
+
 
 passport.serializeUser(function (user, done) {
 	done(null, user._id);
