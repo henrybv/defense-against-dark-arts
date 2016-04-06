@@ -6,6 +6,7 @@ var router = require('express').Router(),
 var HttpError = require('../../utils/HttpError');
 var User = require('./user.model');
 
+
 router.param('id', function (req, res, next, id) {
 	User.findById(id).exec()
 	.then(function (user) {
@@ -17,11 +18,17 @@ router.param('id', function (req, res, next, id) {
 });
 
 router.get('/', function (req, res, next) {
-	User.find({}).exec()
-	.then(function (users) {
-		res.json(users);
-	})
-	.then(null, next);
+
+	if(req.user === undefined || !req.user.isAdmin) {
+		res.sendStatus(404);
+	} else {
+		// res.sendStatus(201);
+		User.find({}).exec()
+		.then(function (users) {
+			res.json(users);
+		})
+		.then(null, next);
+	}
 });
 
 router.post('/', function (req, res, next) {
